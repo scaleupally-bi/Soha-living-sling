@@ -1,0 +1,21 @@
+id,key,name,projectTypeKey,simplified,style,isPrivate,entityId,uuid
+10016,IM,IMCORP,software,True,next-gen,False,538170e4-e640-4e87-bb47-896366483c7a,538170e4-e640-4e87-bb47-896366483c7a
+10017,VC,Vijay Construction,software,True,next-gen,False,532dcbac-c9d2-4e15-9099-d8c4d3ce4362,532dcbac-c9d2-4e15-9099-d8c4d3ce4362
+10018,SAPA,SAPA,software,True,next-gen,False,da7c169c-9807-4c32-a89d-0febd5483542,da7c169c-9807-4c32-a89d-0febd5483542
+10019,WT,World tech,software,True,next-gen,False,7b28d8a4-3679-4bb9-83dd-8e161a471113,7b28d8a4-3679-4bb9-83dd-8e161a471113
+10020,QSP,Qispine,software,True,next-gen,False,5cd02d80-1f68-4310-ab5e-92381e24a26e,5cd02d80-1f68-4310-ab5e-92381e24a26e
+10021,BCX,BullseyeCX,software,True,next-gen,False,1e7c4725-b7b6-4b32-8dd8-23d3a1520610,1e7c4725-b7b6-4b32-8dd8-23d3a1520610
+10023,VF,Victory Family,software,True,next-gen,False,44e8dcc1-21a5-427f-94fd-2c6dae6918b4,44e8dcc1-21a5-427f-94fd-2c6dae6918b4
+10029,TEAM,BI Team,software,False,classic,False,,
+10032,WFS,WFS (Joe),software,True,next-gen,False,8bee87e4-8dc3-427e-aecc-02d2815cab6b,8bee87e4-8dc3-427e-aecc-02d2815cab6b
+10034,TC,Tools Certifications,software,True,next-gen,False,ceecfb9b-fd60-4d7a-b0e6-d15c4d5e0283,ceecfb9b-fd60-4d7a-b0e6-d15c4d5e0283
+10035,SL,Soha Living ,software,True,next-gen,False,349ecd2e-49d4-4722-9c86-34f2e784654b,349ecd2e-49d4-4722-9c86-34f2e784654b
+10003,SOLAR,Sorigin Solar,software,True,next-gen,False,2e67e079-25fc-476c-a1db-cea20bb16a85,2e67e079-25fc-476c-a1db-cea20bb16a85
+10036,PM,Project management,business,True,next-gen,False,d6080e86-70d1-45a5-a6d1-a3352c021484,d6080e86-70d1-45a5-a6d1-a3352c021484
+10037,KAN,Kanban,software,True,next-gen,False,c4fa5027-ea3f-4843-99bc-9cc8b18d8161,c4fa5027-ea3f-4843-99bc-9cc8b18d8161
+10038,COLIN,BullseyeCX (Colin/Lewis),software,True,next-gen,False,b4282ea5-4702-44ef-ab53-1c8fa97a6c1b,b4282ea5-4702-44ef-ab53-1c8fa97a6c1b
+10010,ZING,Zzzing,software,True,next-gen,False,2a0d94c7-3cdd-4cd3-a91a-70af73b15179,2a0d94c7-3cdd-4cd3-a91a-70af73b15179
+10011,RZ,Reiz Tech,software,True,next-gen,False,96ba561d-5531-4548-a51f-ec03466fd07e,96ba561d-5531-4548-a51f-ec03466fd07e
+10012,TFS,TFS,software,True,next-gen,False,c4815bdb-ff1a-42ef-ad52-a645290a5ca4,c4815bdb-ff1a-42ef-ad52-a645290a5ca4
+10014,SW,Sorigin Wind,software,True,next-gen,False,75040898-edf9-4de3-816e-1bf5d8ac1f5c,75040898-edf9-4de3-816e-1bf5d8ac1f5c
+10015,MIT,MITEL,software,True,next-gen,False,7081d943-73e3-4a05-9f82-e998f8767cf1,7081d943-73e3-4a05-9f82-e998f8767cf1

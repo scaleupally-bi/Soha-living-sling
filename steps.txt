@@ -1,0 +1,8 @@
+---------------------------------------------
+models ->
+        |--> base.py --> this file is created for having a common approach for created and updated date columns in all table
+        |--> models.py --> this file will have all the data table schemas 
+utility ->
+         |--> constants ->
+                          |--> db_credentials --> this file is created for having database credentials, this file will load in env variable in setting.py.
+                          |--> api.py -->  
