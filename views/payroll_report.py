@@ -30,71 +30,70 @@ session=Session()
 class PayrollReportClass(Api):
     def extract_payroll_report(self):
         start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        # try:
-        end_point = 'v1/reports/payroll'  
-        end_date = datetime.today().strftime("%Y-%m-%d")
-        end_date = datetime.strptime(end_date,"%Y-%m-%d")
-        start_date = end_date - timedelta(days=10)
+        try:
+            end_point = 'v1/reports/payroll'  
+            end_date = datetime.today().strftime("%Y-%m-%d")
+            end_date = datetime.strptime(end_date,"%Y-%m-%d")
+            start_date = end_date - timedelta(days=40)
 
-        start_date = start_date.strftime("%Y-%m-%d")
-        end_date = end_date.strftime("%Y-%m-%d")
+            start_date = start_date.strftime("%Y-%m-%d")
+            end_date = end_date.strftime("%Y-%m-%d")
+            
+            params = {
+                "dates":f'{start_date}/{end_date}'
+            }
+            
+            response= self.request(end_point,params)  
+            if response.status_code==200:
+                report_data=response.json()
+            
+            else:
+                raise Exception(response.content)
+            
+                    
+            df = pd.DataFrame(pd.json_normalize(report_data))
 
-        start_date = "2023-07-23"
-        end_date = "2023-07-30"
+            rename_columns = {
+                "user.id":"userId",
+                "location.id":"locationId",
+                "position.id":"positionId",
+                "shift.id":"shiftId",
+                "shift.duration":"shiftDuration",
+                "shift.actualDuration":"shiftActualDuration",
+                "shift.breakDuration":"shiftBreakDuration",
+                "shift.actualBreakDuration":"shiftActualBreakDuration"
+            }
+            df.rename(columns=rename_columns,inplace=True)
 
-        
-        params = {
-            "dates":f'{start_date}/{end_date}'
-        }
-        
-        response= self.request(end_point,params)  
-        if response.status_code==200:
-            report_data=response.json()
-        
-        else:
-            raise Exception(response.content)
-        
-                
-        df = pd.DataFrame(pd.json_normalize(report_data))
+            int_columns = df.select_dtypes(include=['int64','float64']).columns
+            int_columns = list(int_columns)
+            int_columns.remove("locationId")
+            int_columns.remove("positionId")
+            df[int_columns] = df[int_columns].fillna(0)
 
-        rename_columns = {
-            "user.id":"userId",
-            "location.id":"locationId",
-            "position.id":"positionId",
-            "shift.id":"shiftId",
-            "shift.duration":"shiftDuration",
-            "shift.actualDuration":"shiftActualDuration",
-            "shift.breakDuration":"shiftBreakDuration",
-            "shift.actualBreakDuration":"shiftActualBreakDuration"
-        }
-        df.rename(columns=rename_columns,inplace=True)
+            df.drop_duplicates(subset=['userId','date','locationId','positionId'],inplace=True)
 
-        int_columns = df.select_dtypes(include=['int64','float64']).columns
-        int_columns = list(int_columns)
-        int_columns.remove("locationId")
-        int_columns.remove("positionId")
-        df[int_columns] = df[int_columns].fillna(0)
+            column_list = get_column_names(PayrollReportTemp)
+            df = df[df.columns.intersection(column_list)]
 
-        df.drop_duplicates(subset=['userId','date','locationId','positionId'],inplace=True)
+            datetime_columns = get_datetime_columns(PayrollReportTemp)
+            df = convert_str_to_datetime(df, datetime_columns)
 
-        column_list = get_column_names(PayrollReportTemp)
-        df = df[df.columns.intersection(column_list)]
+            date_columns = get_date_columns(PayrollReportTemp)
+            df = convert_str_to_date(df,date_columns)
 
-        datetime_columns = get_datetime_columns(PayrollReportTemp)
-        df = convert_str_to_datetime(df, datetime_columns)
+            float_columns = get_float_columns(PayrollReportTemp)
+            round_float_columns(df,float_columns)    
 
-        date_columns = get_date_columns(PayrollReportTemp)
-        df = convert_str_to_date(df,date_columns)
+            delete = session.query(PayrollReport).filter(PayrollReport.date.between(start_date, end_date)).delete(synchronize_session=False)
+            session.commit()
 
-        float_columns = get_float_columns(PayrollReportTemp)
-        round_float_columns(df,float_columns)    
-
-        delete = session.query(PayrollReport).filter(PayrollReport.date.between(start_date, end_date)).delete(synchronize_session=False)
-        session.commit()
-
-        file_name = "upsert_payroll_report.sql"
-        table_name = 'payroll_report'
-        records = bulk_create(PayrollReportTemp,df,payroll_report_temporary_table_query,file_name,table_name)
+            file_name = "upsert_payroll_report.sql"
+            table_name = 'payroll_report'
+            records = bulk_create(PayrollReportTemp,df,payroll_report_temporary_table_query,file_name,table_name)
+        except Exception as e:
+            print(e)
+            session.rollback()
 
 
     # def extract_payroll_report(self):

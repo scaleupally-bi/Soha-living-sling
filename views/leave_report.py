@@ -21,59 +21,59 @@ session=Session()
 class LeaveReportClass(Api):
     def extract_leave_report(self):
         start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        # try:
-        end_point = 'v1/reports/leave'  
-        end_date = datetime.today().strftime("%Y-%m-%d")
-        end_date = datetime.strptime(end_date,"%Y-%m-%d")
-        start_date = end_date - timedelta(days=45)
+        try:
+            end_point = 'v1/reports/leave'  
+            end_date = datetime.today().strftime("%Y-%m-%d")
+            end_date = datetime.strptime(end_date,"%Y-%m-%d")
+            start_date = end_date - timedelta(days=45)
 
-        start_date = start_date.strftime("%Y-%m-%d")
-        end_date = end_date.strftime("%Y-%m-%d")
+            start_date = start_date.strftime("%Y-%m-%d")
+            end_date = end_date.strftime("%Y-%m-%d")
+            
+            params = {
+                "dates":f'{start_date}/{end_date}'
+            }
+            
+            leave_list = []
+            response= self.request(end_point,params)  
+            if response.status_code==200:
+                leave_data=response.json()
+                for user_id, records in leave_data.items():
+                    remaining_value = records.get("remaining")
+                    for key, record in records.items():
+                        if key != "remaining":
+                            row = {
+                                "userId": user_id,
+                                "leaveTypeId": key,
+                                "approved": record.get("approved"),
+                                "approvedMinutes": record.get("approvedMinutes"),
+                                "unpaid": record.get("unpaid"),
+                                "unpaidMinutes": record.get("unpaidMinutes"),
+                                "deniedHours":record.get("deniedHours",None),
+                                "deniedDays":record.get("deniedDays"),
+                                "pending": record.get("pending"),
+                                "pendingMinutes": record.get("pendingMinutes"),
+                                "ptoCost":record.get("ptoCost"),
+                                "remaining": remaining_value
+                            }
+                            leave_list.append(row)
+            
+            else:
+                raise Exception(response.content)
+            
+                    
+            df = pd.DataFrame(leave_list)
 
-        start_date = "2020-01-01"
-        end_date = "2025-07-23"
+            column_list = get_column_names(LeaveReportTemp)
+            df = df[df.columns.intersection(column_list)]
 
-        
-        params = {
-            "dates":f'{start_date}/{end_date}'
-        }
-        
-        leave_list = []
-        response= self.request(end_point,params)  
-        if response.status_code==200:
-            leave_data=response.json()
-            for user_id, records in leave_data.items():
-                remaining_value = records.get("remaining")
-                for key, record in records.items():
-                    if key != "remaining":
-                        row = {
-                            "userId": user_id,
-                            "leaveTypeId": key,
-                            "approved": record.get("approved"),
-                            "approvedMinutes": record.get("approvedMinutes"),
-                            "unpaid": record.get("unpaid"),
-                            "unpaidMinutes": record.get("unpaidMinutes"),
-                            "deniedHours":record.get("deniedHours",None),
-                            "deniedDays":record.get("deniedDays"),
-                            "pending": record.get("pending"),
-                            "pendingMinutes": record.get("pendingMinutes"),
-                            "ptoCost":record.get("ptoCost"),
-                            "remaining": remaining_value
-                        }
-                        leave_list.append(row)
-        
-        else:
-            raise Exception(response.content)
-        
-                
-        df = pd.DataFrame(leave_list)
+            int_columns = df.select_dtypes(include=['int64','float64']).columns
+            df[int_columns] = df[int_columns].fillna(0)
 
-        column_list = get_column_names(LeaveReportTemp)
-        df = df[df.columns.intersection(column_list)]
+            file_name = "upsert_leave_report.sql"
+            table_name = 'leave_report'
+            records = bulk_create(LeaveReportTemp,df,leave_report_temporary_table_query,file_name,table_name)
 
-        int_columns = df.select_dtypes(include=['int64','float64']).columns
-        df[int_columns] = df[int_columns].fillna(0)
-
-        file_name = "upsert_leave_report.sql"
-        table_name = 'leave_report'
-        records = bulk_create(LeaveReportTemp,df,leave_report_temporary_table_query,file_name,table_name)
+        except Exception as e:
+            print(e)
+            session.rollback()
