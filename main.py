@@ -11,32 +11,29 @@ from views.leave_types import *
 
 def run():
     
-    # users = Users()
-    # users.extract_users()
+    users = Users()
+    users.extract_users()
 
-    # users_groups = UsersGroups()
-    # users_groups.extract_users_groups()
+    users_groups = UsersGroups()
+    users_groups.extract_users_groups()
 
-    # labor_report = LaborReportClass()
-    # labor_report.extract_labor_report()
+    labor_report = LaborReportClass()
+    labor_report.extract_labor_report()
 
-    # leave_report = LeaveReportClass()
-    # leave_report.extract_leave_report()
+    leave_report = LeaveReportClass()
+    leave_report.extract_leave_report()
 
     payroll_report = PayrollReportClass()
     payroll_report.extract_payroll_report()
 
-    # noshows = NoshowsClass()
-    # noshows.extract_noshows()
+    noshows = NoshowsClass()
+    noshows.extract_noshows()
 
-    # groups = GroupsClass()
-    # groups.extract_groups()
+    groups = GroupsClass()
+    groups.extract_groups()
 
-    # leave_types = LeaveTypesClass()
-    # leave_types.extract_leave_types()
-
-
-
+    leave_types = LeaveTypesClass()
+    leave_types.extract_leave_types()
 
 if __name__ == '__main__':
     run()
