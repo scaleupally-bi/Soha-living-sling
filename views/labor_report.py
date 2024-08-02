@@ -32,12 +32,13 @@ class LaborReportClass(Api):
         start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         try:
             end_point = 'v1/reports/labor'  
-            end_date = datetime.today().strftime("%Y-%m-%d")
-            end_date = datetime.strptime(end_date,"%Y-%m-%d")
-            start_date = end_date - timedelta(days=45)
+            current_year = datetime.now().year
 
-            start_date = start_date.strftime("%Y-%m-%d")
-            end_date = end_date.strftime("%Y-%m-%d")
+            january_first = datetime(current_year, 1, 1)
+            start_date = january_first.strftime('%Y-%m-%d')
+
+            decemeber_last = datetime(current_year, 12, 31)
+            end_date = decemeber_last.strftime('%Y-%m-%d')
             
             params = {
                 "dates":f'{start_date}/{end_date}'
