@@ -28,7 +28,7 @@ session=Session()
 
 
 class LaborReportClass(Api):
-    def extract_labor_report(self):
+    def extract_labor_report_daily(self):
         start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         try:
             end_point = 'v1/reports/labor'  
@@ -60,8 +60,6 @@ class LaborReportClass(Api):
             }
             df.rename(columns=rename_columns,inplace=True)
 
-            df.drop_duplicates(subset=['userId','date','locationId','positionId'],inplace=True)
-
             column_list = get_column_names(LaborReportTemp)
             df = df[df.columns.intersection(column_list)]
 
@@ -84,57 +82,56 @@ class LaborReportClass(Api):
             print(e)
             session.rollback()
 
-    # def extract_labor_report(self):
-    #     start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    #     # try:
-    #     end_point = 'v1/reports/labor'  
-    #     start_date = '2023-01-01'
-    #     end_date = '2023-02-01'
-    #     future_date = '2025-08-30'
-    #     report_data_list = []
-    #     while datetime.strptime(start_date,"%Y-%m-%d")<= datetime.strptime(future_date,"%Y-%m-%d"):
-    #         print("start_date:",start_date)
-    #         print("end_date:",end_date)
-    #         params = {
-    #             "dates":f'{start_date}/{end_date}'
-    #         }
+    def extract_labor_report_one_time(self):
+        start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        # try:
+        end_point = 'v1/reports/labor'  
+        start_date = '2023-01-01'
+        end_date = '2023-02-01'
+        future_date = '2025-08-30'
+        report_data_list = []
+        while datetime.strptime(start_date,"%Y-%m-%d")<= datetime.strptime(future_date,"%Y-%m-%d"):
+            print("start_date:",start_date)
+            print("end_date:",end_date)
+            params = {
+                "dates":f'{start_date}/{end_date}'
+            }
             
-    #         response= self.request(end_point,params)  
-    #         if response.status_code==200:
-    #             report_data=response.json()['cost']
-    #             report_data_list.extend(report_data)
+            response= self.request(end_point,params)  
+            if response.status_code==200:
+                report_data=response.json()['cost']
+                report_data_list.extend(report_data)
                 
-    #         else:
-    #             raise Exception(response.content)
-    #         start_date = end_date
-    #         end_date = datetime.strptime(end_date, "%Y-%m-%d") + timedelta(days=90)
-    #         end_date = datetime.strftime(end_date,"%Y-%m-%d")
+            else:
+                raise Exception(response.content)
+            start_date = end_date
+            end_date = datetime.strptime(end_date, "%Y-%m-%d") + timedelta(days=90)
+            end_date = datetime.strftime(end_date,"%Y-%m-%d")
                 
-    #     df = pd.DataFrame(pd.json_normalize(report_data_list))
+        df = pd.DataFrame(pd.json_normalize(report_data_list))
 
-    #     rename_columns = {
-    #         "user.id":"userId",
-    #         "location.id":"locationId",
-    #         "position.id":"positionId"
-    #     }
-    #     df.rename(columns=rename_columns,inplace=True)
-
-    #     df.drop_duplicates(subset=['userId','date','locationId','positionId'],inplace=True)
-
-    #     column_list = get_column_names(LaborReportTemp)
-    #     df = df[df.columns.intersection(column_list)]
-
-    #     datetime_columns = get_datetime_columns(LaborReportTemp)
-    #     df = convert_str_to_datetime(df, datetime_columns)
-
-    #     date_columns = get_date_columns(LaborReportTemp)
-    #     df = convert_str_to_date(df,date_columns)
-
-    #     float_columns = get_float_columns(LaborReportTemp)
-    #     round_float_columns(df,float_columns)    
+        rename_columns = {
+            "user.id":"userId",
+            "location.id":"locationId",
+            "position.id":"positionId"
+        }
+        df.rename(columns=rename_columns,inplace=True)
 
 
-    #     file_name = "upsert_labor_report.sql"
-    #     table_name = 'labor_report'
-    #     records = bulk_create(LaborReportTemp,df,labor_report_temporary_table_query,file_name,table_name)
+        column_list = get_column_names(LaborReportTemp)
+        df = df[df.columns.intersection(column_list)]
+
+        datetime_columns = get_datetime_columns(LaborReportTemp)
+        df = convert_str_to_datetime(df, datetime_columns)
+
+        date_columns = get_date_columns(LaborReportTemp)
+        df = convert_str_to_date(df,date_columns)
+
+        float_columns = get_float_columns(LaborReportTemp)
+        round_float_columns(df,float_columns)    
+
+
+        file_name = "upsert_labor_report.sql"
+        table_name = 'labor_report'
+        records = bulk_create(LaborReportTemp,df,labor_report_temporary_table_query,file_name,table_name)
 		
