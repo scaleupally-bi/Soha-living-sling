@@ -20,11 +20,11 @@ def run():
     # labor_report = LaborReportClass()
     # labor_report.extract_labor_report()
 
-    # leave_report = LeaveReportClass()
-    # leave_report.extract_leave_report()
+    leave_report = LeaveReportClass()
+    leave_report.extract_leave_report()
 
-    payroll_report = PayrollReportClass()
-    payroll_report.extract_payroll_report()
+    # payroll_report = PayrollReportClass()
+    # payroll_report.extract_payroll_report()
 
     # noshows = NoshowsClass()
     # noshows.extract_noshows()

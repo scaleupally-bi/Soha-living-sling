@@ -129,7 +129,7 @@ CREATE TABLE #leave_report_temp(
 	[approvedMinutes] [int] NULL,
 	[unpaid] [int] NULL,
 	[unpaidMinutes] [int] NULL,
-	[deniedHours] [float] NULL,
+	[deniedMinutes] [float] NULL,
 	[deniedDays] [float] NULL,
 	[ptoCost] [float] NULL,
 	[pending] [int] NULL,

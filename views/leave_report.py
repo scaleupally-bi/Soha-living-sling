@@ -29,6 +29,9 @@ class LeaveReportClass(Api):
 
             start_date = start_date.strftime("%Y-%m-%d")
             end_date = end_date.strftime("%Y-%m-%d")
+
+            start_date = "2020-01-01"
+            end_date = "2025-07-23"
             
             params = {
                 "dates":f'{start_date}/{end_date}'
@@ -49,8 +52,8 @@ class LeaveReportClass(Api):
                                 "approvedMinutes": record.get("approvedMinutes"),
                                 "unpaid": record.get("unpaid"),
                                 "unpaidMinutes": record.get("unpaidMinutes"),
-                                "deniedHours":record.get("deniedHours",None),
-                                "deniedDays":record.get("deniedDays"),
+                                "deniedMinutes":record.get("deniedMinutes",None),
+                                "deniedDays":record.get("denied"),
                                 "pending": record.get("pending"),
                                 "pendingMinutes": record.get("pendingMinutes"),
                                 "ptoCost":record.get("ptoCost"),
@@ -69,6 +72,8 @@ class LeaveReportClass(Api):
 
             int_columns = df.select_dtypes(include=['int64','float64']).columns
             df[int_columns] = df[int_columns].fillna(0)
+
+            df['remaining'] = df['remaining'].round(2)
 
             file_name = "upsert_leave_report.sql"
             table_name = 'leave_report'
