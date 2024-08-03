@@ -29,6 +29,7 @@ class LeaveReportClass(Api):
 
             start_date = start_date.strftime("%Y-%m-%d")
             end_date = end_date.strftime("%Y-%m-%d")
+
             
             params = {
                 "dates":f'{start_date}/{end_date}'

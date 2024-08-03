@@ -17,14 +17,16 @@ def run():
     users_groups = UsersGroups()
     users_groups.extract_users_groups()
 
-    labor_report = LaborReportClass()
-    labor_report.extract_labor_report()
+    # labor_report = LaborReportClass()
+    # labor_report.extract_labor_report_daily()
+    # labor_report.extract_labor_report_one_time()
 
-    leave_report = LeaveReportClass()
-    leave_report.extract_leave_report()
+    # leave_report = LeaveReportClass()
+    # leave_report.extract_leave_report()
 
-    # payroll_report = PayrollReportClass()
-    # payroll_report.extract_payroll_report()
+    payroll_report = PayrollReportClass()
+    payroll_report.extract_payroll_report_daily()
+    # payroll_report.extract_payroll_report_one_time()
 
     noshows = NoshowsClass()
     noshows.extract_noshows()
