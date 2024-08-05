@@ -8,7 +8,7 @@ from utility.constants import *
 from utility.setting import *
 from utility.request import *
 from models.models import *
-from utility.helper import get_column_names,bulk_create
+from utility.helper import get_column_names,bulk_create, save_logs
 from utility.temporary_table_query import users_groups_temporary_table_query
 from datetime import datetime
 import pandas as pd
@@ -44,6 +44,10 @@ class UsersGroups(Api):
             file_name = "upsert_users_groups.sql"
             table_name = 'user_groups'
             records = bulk_create(UserGroupTemp,df,users_groups_temporary_table_query,file_name,table_name)
+            end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            save_logs("user_groups",start_time,end_time,None,records['total_no_of_insert'],records['total_no_of_update'],datetime.now())
         except Exception as e:
             print(e)
+            end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            save_logs("user_groups",start_time,end_time,e,0,0,datetime.now())
             session.rollback()

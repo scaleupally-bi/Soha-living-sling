@@ -124,6 +124,7 @@ leave_report_temporary_table_query = '''
 CREATE TABLE #leave_report_temp(
 	[systemGeneratedId] [int] IDENTITY(1,1) NOT NULL,
 	[userId] [int] NOT NULL,
+    [date] [date] NULL,
 	[leaveTypeId] [int] NOT NULL,
 	[approved] [int] NULL,
 	[approvedMinutes] [int] NULL,
