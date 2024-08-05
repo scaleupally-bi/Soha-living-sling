@@ -8,7 +8,7 @@ from utility.constants import *
 from utility.setting import *
 from utility.request import *
 from models.models import *
-from utility.helper import  get_column_names,bulk_create
+from utility.helper import  get_column_names,bulk_create, save_logs
 from utility.temporary_table_query import noshows_temporary_table_query
 
 from datetime import datetime,timedelta
@@ -69,6 +69,10 @@ class NoshowsClass(Api):
             file_name = "upsert_noshows.sql"
             table_name = 'noshows'
             records = bulk_create(NoShowsTemp,df,noshows_temporary_table_query,file_name,table_name)
+            end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            save_logs("noshows",start_time,end_time,None,records['total_no_of_insert'],records['total_no_of_update'],datetime.now())
         except Exception as e:
             print(e)
+            end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            save_logs("noshows",start_time,end_time,e,0,0,datetime.now())
             session.rollback()

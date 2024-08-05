@@ -206,3 +206,18 @@ def round_float_columns(df,columns_names):
         df[col] = df[col].astype(float)
         df[col] = df[col].round(2)
     return df
+
+
+def save_logs(table_name,start_time,end_time,error,number_of_records_created,number_of_records_updated,created_at):
+
+    obj = Logsheet(
+        tableName=table_name,
+        startTime=start_time,
+        endTime=end_time,
+        error = error,
+        noRecordsCreated=number_of_records_created,
+        noRecordsUpdated=number_of_records_updated,
+        createdAt=datetime.now()
+    )
+    session.add(obj)
+    session.commit()

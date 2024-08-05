@@ -8,7 +8,7 @@ from utility.constants import *
 from utility.setting import *
 from utility.request import *
 from models.models import *
-from utility.helper import  get_column_names,bulk_create, get_datetime_columns, get_date_columns,convert_str_to_datetime,convert_str_to_date,convert_country_code
+from utility.helper import  get_column_names,bulk_create, get_datetime_columns, get_date_columns,convert_str_to_datetime,convert_str_to_date, save_logs
 from utility.temporary_table_query import users_temporary_table_query
 import numpy as np
 from datetime import datetime
@@ -49,6 +49,10 @@ class Users(Api):
             file_name = "upsert_users.sql"
             table_name = 'users'
             records = bulk_create(UserTemp,df,users_temporary_table_query,file_name,table_name)
+            end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            save_logs("users",start_time,end_time,None,records['total_no_of_insert'],records['total_no_of_update'],datetime.now())
         except Exception as e:
             print(e)
+            end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            save_logs("users",start_time,end_time,e,0,0,datetime.now())
             session.rollback()

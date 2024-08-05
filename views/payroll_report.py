@@ -16,7 +16,8 @@ from utility.helper import  (
     convert_str_to_datetime,
     convert_str_to_date,
     get_float_columns,
-    round_float_columns
+    round_float_columns,
+    save_logs
 )
 from utility.temporary_table_query import payroll_report_temporary_table_query
 
@@ -90,8 +91,12 @@ class PayrollReportClass(Api):
             file_name = "upsert_payroll_report.sql"
             table_name = 'payroll_report'
             records = bulk_create(PayrollReportTemp,df,payroll_report_temporary_table_query,file_name,table_name)
+            end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            save_logs("payroll_report",start_time,end_time,None,records['total_no_of_insert'],records['total_no_of_update'],datetime.now())
         except Exception as e:
             print(e)
+            end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            save_logs("payroll_report",start_time,end_time,e,0,0,datetime.now())
             session.rollback()
 
 

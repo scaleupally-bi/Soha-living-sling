@@ -254,6 +254,7 @@ class LeaveReport(Base):
     
     systemGeneratedId = Column(Integer, primary_key=True, autoincrement=True)
     userId = Column(Integer, nullable=False)
+    date = Column(Date,nullable=True)
     leaveTypeId = Column(Integer, nullable=False)
     approved = Column(Integer, nullable=True)
     approvedMinutes = Column(Integer, nullable=True)
@@ -274,6 +275,7 @@ class LeaveReportTemp(Base):
     
     systemGeneratedId = Column(Integer, primary_key=True, autoincrement=True)
     userId = Column(Integer, nullable=False)
+    date = Column(Date,nullable=True)
     leaveTypeId = Column(Integer, nullable=False)
     approved = Column(Integer, nullable=True)
     approvedMinutes = Column(Integer, nullable=True)
@@ -469,3 +471,16 @@ class LeaveTypeTemp(Base):
     cap = Column(NVARCHAR(255), nullable=True)
     available = Column(Boolean, nullable=True)
 
+
+
+class Logsheet(Base):
+    __tablename__ = 'logsheet'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    tableName = Column(NVARCHAR(255), nullable=False)
+    startTime = Column(NVARCHAR(255), nullable=False)
+    endTime = Column(NVARCHAR(255), nullable=False)
+    error = Column(NVARCHAR(4000),nullable=True)
+    noRecordsCreated = Column(Integer, nullable=True)
+    noRecordsUpdated = Column(Integer, nullable=True)
+    createdAt = Column(DateTime, nullable=True)

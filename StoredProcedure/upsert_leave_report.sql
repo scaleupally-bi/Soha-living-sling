@@ -1,10 +1,11 @@
 
 MERGE INTO leave_report AS target
 USING #leave_report_temp AS source
-ON target.userId = source.userId and target.leaveTypeId = source.leaveTypeId
+ON target.userId = source.userId and target.date = source.date and target.leaveTypeId = source.leaveTypeId
 WHEN MATCHED THEN
     UPDATE SET
         target.userId = source.userId,
+        target.date = source.date,
         target.leaveTypeId = source.leaveTypeId,
         target.approved = source.approved,
         target.approvedMinutes = source.approvedMinutes,
@@ -20,6 +21,7 @@ WHEN MATCHED THEN
 WHEN NOT MATCHED THEN
     INSERT (
         userId,
+        date,
         leaveTypeId,
         approved,
         approvedMinutes,
@@ -35,6 +37,7 @@ WHEN NOT MATCHED THEN
     )
     VALUES (
         source.userId,
+        source.date,
         source.leaveTypeId,
         source.approved,
         source.approvedMinutes,
