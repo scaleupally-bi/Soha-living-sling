@@ -30,9 +30,6 @@ class LeaveReportClass(Api):
             start_date = start_date.strftime("%Y-%m-%d")
             end_date = end_date.strftime("%Y-%m-%d")
 
-<<<<<<< HEAD
-            
-=======
             date_range = pd.date_range(start=start_date, end=end_date)
             date_list = date_range.strftime("%Y-%m-%d").to_list()
 
@@ -117,7 +114,6 @@ class LeaveReportClass(Api):
         for date in date_list:
             print("date:", date)
             time.sleep(1)
->>>>>>> development
             params = {
                 "dates":f'{date}/{date}'
             }
