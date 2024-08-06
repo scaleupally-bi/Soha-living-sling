@@ -386,6 +386,7 @@ class NoShows(Base):
     
     systemGeneratedId = Column(Integer, primary_key=True, autoincrement=True)
     userId = Column(Integer, nullable=False)
+    date = Column(Date,nullable=True)
     locationId = Column(Integer, nullable=False)
     positionId = Column(Integer, nullable=False)
     scheduled = Column(Integer, nullable=True)
@@ -404,6 +405,7 @@ class NoShowsTemp(Base):
     
     systemGeneratedId = Column(Integer, primary_key=True, autoincrement=True)
     userId = Column(Integer, nullable=False)
+    date = Column(Date,nullable=True)
     locationId = Column(Integer, nullable=False)
     positionId = Column(Integer, nullable=False)
     scheduled = Column(Integer, nullable=True)

@@ -192,6 +192,7 @@ noshows_temporary_table_query = '''
 CREATE TABLE #noshows_temp(
 	[systemGeneratedId] [int] IDENTITY(1,1) NOT NULL,
 	[userId] [int] NOT NULL,
+    [date] [date] NULL,
 	[locationId] [int] NOT NULL,
 	[positionId] [int] NOT NULL,
 	[scheduled] [int] NULL,

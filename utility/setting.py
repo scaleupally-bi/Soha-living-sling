@@ -41,18 +41,18 @@ if os.path.exists(str(root_dir)+'/salesforce/credentials.json'):
 # -------------------------------------------------------------
 
 if os.path.exists(str(root_dir)+'/utility/constants/db_credentials.json'):
-
- 
-   
     with open(str(root_dir)+'/utility/constants/db_credentials.json') as f:
         env = json.load(f)
         os.environ.update(env)
 
 if os.path.exists(str(root_dir)+'/utility/constants/soha-living.json'):
-
- 
-   
     with open(str(root_dir)+'/utility/constants/soha-living.json') as f:
+        env = json.load(f)
+        os.environ.update(env)
+
+
+if os.path.exists(str(root_dir)+'/utility/constants/filters.json'):
+    with open(str(root_dir)+'/utility/constants/filters.json') as f:
         env = json.load(f)
         os.environ.update(env)
 

@@ -109,8 +109,6 @@ class PayrollReportClass(Api):
         future_date = '2025-08-30'
         report_data_list = []
         while datetime.strptime(start_date,"%Y-%m-%d")<= datetime.strptime(future_date,"%Y-%m-%d"):
-            print("start_date:",start_date)
-            print("end_date:",end_date)
             params = {
                 "dates":f'{start_date}/{end_date}'
             }
@@ -122,7 +120,8 @@ class PayrollReportClass(Api):
                 
             else:
                 raise Exception(response.content)
-            start_date = end_date
+            start_date = datetime.strptime(end_date, "%Y-%m-%d") + timedelta(days=1) 
+            start_date = start_date.strftime("%Y-%m-%d")
             end_date = datetime.strptime(end_date, "%Y-%m-%d") + timedelta(days=90)
             end_date = datetime.strftime(end_date,"%Y-%m-%d")
                 

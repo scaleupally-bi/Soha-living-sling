@@ -1,9 +1,10 @@
 MERGE INTO noshows AS target
 USING #noshows_temp AS source
-ON target.userId = source.userId and target.locationId = source.locationId and target.positionId = source.positionId
+ON target.userId = source.userId and target.date = source.date and target.locationId = source.locationId and target.positionId = source.positionId
 WHEN MATCHED THEN
     UPDATE SET
         target.userId = source.userId,
+        target.date = source.date,
         target.locationId = source.locationId,
         target.positionId = source.positionId,
         target.scheduled = source.scheduled,
@@ -17,6 +18,7 @@ WHEN MATCHED THEN
 WHEN NOT MATCHED THEN
     INSERT (
         userId,
+        date,
         locationId,
         positionId,
         scheduled,
@@ -30,6 +32,7 @@ WHEN NOT MATCHED THEN
     )
     VALUES (
         source.userId,
+        source.date,
         source.locationId,
         source.positionId,
         source.scheduled,
