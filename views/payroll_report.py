@@ -38,22 +38,38 @@ class PayrollReportClass(Api):
             january_first = datetime(current_year, 1, 1)
             start_date = january_first.strftime('%Y-%m-%d')
 
-            decemeber_last = datetime(current_year, 12, 31)
-            end_date = decemeber_last.strftime('%Y-%m-%d')
-            
-            params = {
-                "dates":f'{start_date}/{end_date}'
-            }
-            
-            response= self.request(end_point,params)  
-            if response.status_code==200:
-                report_data=response.json()
-            
-            else:
-                raise Exception(response.content)
+            january_second = datetime(current_year, 2, 1)
+            end_date = january_second.strftime('%Y-%m-%d')
+
+            iter = True
+            payroll_leave_list = []
+            while iter == True:
+                print("start_date:",start_date)
+                print("end_date:",end_date)
+
+                params = {
+                    "dates":f'{start_date}/{end_date}'
+                }
+                
+                response= self.request(end_point,params)  
+                if response.status_code==200:
+                    report_data=response.json()
+                    if len(report_data)>0:
+                        payroll_leave_list.extend(report_data)
+                        iter = True
+                    else:
+                        iter = False
+                
+                else:
+                    iter = False
+                    raise Exception(response.content)
+                start_date = datetime.strptime(end_date, "%Y-%m-%d") + timedelta(days=1) 
+                start_date = start_date.strftime("%Y-%m-%d")
+                end_date = datetime.strptime(end_date, "%Y-%m-%d") + timedelta(days=90)
+                end_date = datetime.strftime(end_date,"%Y-%m-%d")
             
                     
-            df = pd.DataFrame(pd.json_normalize(report_data))
+            df = pd.DataFrame(pd.json_normalize(payroll_leave_list))
 
             rename_columns = {
                 "user.id":"userId",
@@ -83,7 +99,11 @@ class PayrollReportClass(Api):
             df = convert_str_to_date(df,date_columns)
 
             float_columns = get_float_columns(PayrollReportTemp)
-            round_float_columns(df,float_columns)    
+            round_float_columns(df,float_columns)  
+
+            df['date'] = pd.to_datetime(df['date'])  
+            start_date = df['date'].min()
+            end_date = df['date'].max()
 
             delete = session.query(PayrollReport).filter(PayrollReport.date.between(start_date, end_date)).delete(synchronize_session=False)
             session.commit()
