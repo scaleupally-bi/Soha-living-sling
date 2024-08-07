@@ -14,12 +14,12 @@ def run():
     # users = Users()
     # users.extract_users()
 
-    # users_groups = UsersGroups()
+    users_groups = UsersGroups()
     # users_groups.extract_users_groups()
 
     labor_report = LaborReportClass()
     # labor_report.extract_labor_report_daily()
-    labor_report.extract_labor_report_one_time()
+    # labor_report.extract_labor_report_one_time()
 
     leave_report = LeaveReportClass()
     # leave_report.extract_leave_report()
@@ -33,11 +33,11 @@ def run():
     noshows = NoshowsClass()
     noshows.extract_noshows()
 
-    groups = GroupsClass()
-    groups.extract_groups()
+    # groups = GroupsClass()
+    # groups.extract_groups()
 
-    leave_types = LeaveTypesClass()
-    leave_types.extract_leave_types()
+    # leave_types = LeaveTypesClass()
+    # leave_types.extract_leave_types()
 
 if __name__ == '__main__':
     run()

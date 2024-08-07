@@ -1,20 +1,15 @@
 
-		MERGE INTO user_groups AS target
-		USING #user_groups_temp AS source
-		ON target.userId = source.userId and target.groupId = source.groupId
-		WHEN MATCHED THEN
-			UPDATE SET
-				target.groupId = source.groupId,
-				target.ETLUpdatedAt = GETDATE()
-		WHEN NOT MATCHED THEN
-			INSERT (
-				userId,
-				groupId,
-				ETLCreatedAt
-			)
-			VALUES (
-				source.userId,
-				source.groupId,
-				GETDATE()
-			);
+
+	TRUNCATE TABLE user_groups;
+
+	INSERT INTO user_groups(
+		userId,
+		groupId,
+		ETLCreatedAt
+	)
+	SELECT 
+		userId,
+		groupId,
+		GETDATE()
+	FROM #user_groups_temp;
 

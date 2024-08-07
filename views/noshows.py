@@ -23,16 +23,16 @@ class NoshowsClass(Api):
         start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         try:
             end_point = 'v1/reports/noshows'  
-            end_date = datetime.today().strftime("%Y-%m-%d")
-            end_date = datetime.strptime(end_date,"%Y-%m-%d")
+            start_date = datetime.today().strftime("%Y-%m-%d")
+            start_date = datetime.strptime(start_date,"%Y-%m-%d")
             no_last_days = os.getenv("no_last_days")
-            start_date = end_date - timedelta(days=int(no_last_days))
+            end_date = start_date + timedelta(days=int(no_last_days))
 
             start_date = start_date.strftime("%Y-%m-%d")
             end_date = end_date.strftime("%Y-%m-%d")
 
-            # start_date = "2025-08-25"
-            # end_date = "2025-08-30"
+            # start_date = "2023-04-28"
+            # end_date = "2025-08-03"
 
             date_range = pd.date_range(start=start_date, end=end_date)
             date_list = date_range.strftime("%Y-%m-%d").to_list()
