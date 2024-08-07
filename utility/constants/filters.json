@@ -1,3 +1,4 @@
 {
-    "no_last_days":"60"
+    "no_last_days":"30",
+    "no_future_days":"30"
 }

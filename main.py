@@ -23,6 +23,7 @@ def run():
 
     leave_report = LeaveReportClass()
     # leave_report.extract_leave_report()
+    leave_report.extract_leave_report_club()
     # leave_report.extract_leave_report_date_wise()
     # leave_report.extract_leave_report_week_wise()
 
@@ -31,7 +32,7 @@ def run():
     # payroll_report.extract_payroll_report_one_time()
 
     noshows = NoshowsClass()
-    noshows.extract_noshows()
+    # noshows.extract_noshows()
 
     # groups = GroupsClass()
     # groups.extract_groups()

@@ -1,25 +1,14 @@
+    DECLARE @MinDaily DATE, @MaxDaily DATE;
 
-MERGE INTO leave_report AS target
-USING #leave_report_temp AS source
-ON target.userId = source.userId and target.date = source.date and target.leaveTypeId = source.leaveTypeId
-WHEN MATCHED THEN
-    UPDATE SET
-        target.userId = source.userId,
-        target.date = source.date,
-        target.leaveTypeId = source.leaveTypeId,
-        target.approved = source.approved,
-        target.approvedMinutes = source.approvedMinutes,
-        target.unpaid = source.unpaid,
-        target.unpaidMinutes = source.unpaidMinutes,
-        target.deniedMinutes = source.deniedMinutes,
-        target.deniedDays = source.deniedDays,
-        target.ptoCost = source.ptoCost,
-        target.pending = source.pending,
-        target.pendingMinutes = source.pendingMinutes,
-        target.remaining = source.remaining,
-        target.ETLUpdatedAt = GETDATE()
-WHEN NOT MATCHED THEN
-    INSERT (
+    -- Get the minimum and maximum Daily values from #ReportTemp
+    SELECT @MinDaily = MIN(date), @MaxDaily = MAX(date)
+    FROM #leave_report_temp;
+
+    -- Delete records from Report where Daily is between @MinDaily and @MaxDaily
+    DELETE FROM leave_report
+    WHERE date BETWEEN @MinDaily AND @MaxDaily;
+
+    INSERT INTO leave_report(
         userId,
         date,
         leaveTypeId,
@@ -35,20 +24,21 @@ WHEN NOT MATCHED THEN
         remaining,
         ETLCreatedAt
     )
-    VALUES (
-        source.userId,
-        source.date,
-        source.leaveTypeId,
-        source.approved,
-        source.approvedMinutes,
-        source.unpaid,
-        source.unpaidMinutes,
-        source.deniedMinutes,
-        source.deniedDays,
-        source.ptoCost,
-        source.pending,
-        source.pendingMinutes,
-        source.remaining,
+    
+    select 
+        userId,
+        date,
+        leaveTypeId,
+        approved,
+        approvedMinutes,
+        unpaid,
+        unpaidMinutes,
+        deniedMinutes,
+        deniedDays,
+        ptoCost,
+        pending,
+        pendingMinutes,
+        remaining,
         GETDATE()
-    );
+    from #leave_report_temp;
 
